@@ -48,8 +48,7 @@ The **ConsumerApp** must provide:
 - Configuration values
 
 ## Dependency Graph
-```
-mermaid
+```mermaid
 graph TB
 subgraph "Consumer Application"
 Program[Program.cs]
@@ -106,8 +105,7 @@ end
     class PaymentProc,Validator,ReceiptGen,Repository internal
 ```
 ### Dependency Flow
-```
-mermaid
+```mermaid
 sequenceDiagram
 participant App as Consumer App
 participant SC as ServiceConfiguration
@@ -213,8 +211,7 @@ Solution/
 ### Step 1: Implement External Dependencies
 
 The library requires two external dependencies. Implement them in your consumer application:
-```
-csharp
+```csharp
 // Implement IPaymentGateway for your payment provider
 public class StripePaymentGateway : IPaymentGateway
 {
@@ -240,8 +237,7 @@ public class EmailNotificationService : INotificationService
 ### Step 2: Configure Services
 
 Create a `ServiceConfiguration.cs` to set up all dependencies:
-```
-csharp
+```csharp
 public static class ServiceConfiguration
 {
     public static IServiceProvider ConfigureServices()
@@ -285,8 +281,7 @@ public static class ServiceConfiguration
 }
 ```
 ### Step 3: Use the Library
-```
-csharp
+```csharp
 class Program
 {
     static async Task Main(string[] args)
@@ -326,8 +321,7 @@ class Program
 ## Configuration
 
 ### Library Configuration Options
-```
-csharp
+```csharp
 public class PaymentLibraryConfiguration
 {
     // Enable/disable notification sending
@@ -343,8 +337,7 @@ public class PaymentLibraryConfiguration
 ### Configuration Examples
 
 **Basic configuration:**
-```
-csharp
+```csharp
 services.AddPaymentLibrary(config =>
 {
     config.EnableNotifications = true;
@@ -352,8 +345,7 @@ services.AddPaymentLibrary(config =>
 });
 ```
 **Production configuration:**
-```
-csharp
+```csharp
 services.AddPaymentLibrary(config =>
 {
     config.EnableNotifications = true;
@@ -362,8 +354,7 @@ services.AddPaymentLibrary(config =>
 });
 ```
 **Testing configuration:**
-```
-csharp
+```csharp
 services.AddPaymentLibrary(config =>
 {
     config.EnableNotifications = false; // Don't send emails in tests
@@ -375,8 +366,7 @@ services.AddPaymentLibrary(config =>
 ### Adding New Internal Services
 
 Internal services are automatically managed by the library. Just add them to the registration:
-```
-csharp
+```csharp
 // In PaymentLibraryServiceCollectionExtensions.cs
 public static IServiceCollection AddPaymentLibrary(...)
 {
@@ -451,8 +441,7 @@ public static IServiceCollection AddPaymentLibrary(...)
 ### Testing Strategies
 
 **Testing the library:**
-```
-csharp
+```csharp
 [Test]
 public async Task ProcessPayment_Success_ReturnsValidResult()
 {
@@ -476,8 +465,7 @@ public async Task ProcessPayment_Success_ReturnsValidResult()
 }
 ```
 **Testing the consumer:**
-```
-csharp
+```csharp
 [Test]
 public async Task ConsumerApp_CanResolveAllDependencies()
 {
@@ -501,8 +489,7 @@ All dependency registration happens in one place (`ServiceConfiguration.cs`), ma
 
 ### 2. Extension Method Pattern
 Clean, fluent API for library registration:
-```
-csharp
+```csharp
 services.AddPaymentLibrary(config => { ... })
 ```
 ### 3. Dependency Inversion Principle
@@ -521,8 +508,7 @@ Configuration is passed via strongly-typed options object with lambda configurat
 **Cause:** You forgot to register an implementation of `IPaymentGateway`.
 
 **Solution:** Add before calling `AddPaymentLibrary()`:
-```
-csharp
+```csharp
 services.AddSingleton<IPaymentGateway, YourPaymentGatewayImpl>();
 ```
 ### Error: "Unable to resolve service for type 'IPaymentProcessor'"
